@@ -1,0 +1,12 @@
+{
+  "name": "Chromium KasmVNC",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "hostRequirements": { "cpus": 4 },
+  "runArgs": ["--shm-size=2g"],
+  "postCreateCommand": "set -e; cd /tmp && curl -fsSLO https://github.com/kasmtech/KasmVNC/releases/download/v1.5.2/kasmvncserver_debian_bookworm_1.5.2_amd64.deb && sudo apt-get update && sudo apt-get install -y --no-install-recommends ./kasmvncserver_debian_bookworm_1.5.2_amd64.deb openbox xterm chromium fonts-liberation ffmpeg x11-xserver-utils && sudo adduser $USER ssl-cert && mkdir -p ~/.vnc && printf 'desktop:\\n  resolution:\\n    width: 1280\\n    height: 720\\n  allow_resize: true\\nnetwork:\\n  protocol: http\\n  interface: 0.0.0.0\\n  websocket_port: 6901\\n  ssl:\\n    require_ssl: false\\n' > ~/.vnc/kasmvnc.yaml && printf '#!/bin/sh\\nchromium --no-sandbox --disable-dev-shm-usage --disable-gpu --start-maximized &\\nexec openbox-session\\n' > ~/.vnc/xstartup && chmod +x ~/.vnc/xstartup && printf 'vscode\\nvscode\\n' | vncpasswd -u vscode -w -r",
+  "postStartCommand": "vncserver -kill :1 >/dev/null 2>&1; rm -f /tmp/.X1-lock /tmp/.X11-unix/X1; sg ssl-cert -c 'vncserver :1 -select-de manual'",
+  "forwardPorts": [6901],
+  "portsAttributes": {
+    "6901": { "label": "Chromium (KasmVNC)", "protocol": "http", "onAutoForward": "notify" }
+  }
+}
