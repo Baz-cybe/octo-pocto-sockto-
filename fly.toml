@@ -1,16 +1,21 @@
-app = "octopoctosockto"
-primary_region = "iad"
+# fly.toml app configuration file generated for octopoctosockto on 2026-11-13T15:33:42Z
+#
+# See https://docs.fly.io/reference/configuration for information about how to use this file.
+#
+
+app = 'octopoctosockto'
+primary_region = 'iad'
 
 [build]
-
 [http_service]
   internal_port = 6901
   force_https = true
-  auto_stop_machines = "stop"
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
 
 [[vm]]
-  cpu_kind = "shared"
+  memory = '2gb'
+  cpu_kind = 'shared'
   cpus = 2
-  memory = "2gb"
+  memory_mb = 2048
